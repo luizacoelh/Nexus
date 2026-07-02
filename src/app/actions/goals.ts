@@ -10,19 +10,34 @@ interface CreateGoalInput {
   title: string
   description?: string
 }
+
 interface UpdateGoalInput {
   id: string
   title?: string
   description?: string
-  status?: GoalStatus
+  status?: "ACTIVE" | "COMPLETED" | "ARCHIVED"
+}
+
+async function getValidUserId() {
+  const session = await getServerSession(authOptions)
+  
+  if (!session?.user?.email) {
+    return null
+  }
+
+  const dbUser = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true }
+  })
+
+  return dbUser?.id || null
 }
 
 export async function createGoal(data: CreateGoalInput) {
   try {
-    const session = await getServerSession(authOptions)
-    const user = session?.user as { id?: string; name?: string; email?: string } | undefined
+    const userId = await getValidUserId()
 
-    if (!user?.id) {
+    if (!userId) {
       throw new Error("Não autorizado. Você precisa estar logado para criar uma meta.")
     }
 
@@ -31,7 +46,7 @@ export async function createGoal(data: CreateGoalInput) {
         title: data.title,
         description: data.description || null,
         status: GoalStatus.ACTIVE,
-        userId: user.id,
+        userId: userId,
       },
     })
 
@@ -45,19 +60,18 @@ export async function createGoal(data: CreateGoalInput) {
 
 export async function getGoals() {
   try {
-    const session = await getServerSession(authOptions)
-    const user = session?.user as { id?: string; name?: string; email?: string } | undefined
+    const userId = await getValidUserId()
 
-    if (!user?.id) {
+    if (!userId) {
       throw new Error("Não autorizado. Você precisa estar logado para ver as metas.")
     }
 
     const goals = await prisma.goal.findMany({
       where: {
-        userId: user.id,
+        userId: userId,
       },
       orderBy: {
-        title: "asc", 
+        title: "asc",
       },
     })
 
@@ -70,27 +84,25 @@ export async function getGoals() {
 
 export async function updateGoal(data: UpdateGoalInput) {
   try {
-    const session = await getServerSession(authOptions)
-    const user = session?.user as { id?: string; name?: string; email?: string } | undefined
+    const userId = await getValidUserId()
 
-    if (!user?.id) {
+    if (!userId) {
       throw new Error("Não autorizado. Você precisa estar logado para editar uma meta.")
     }
 
     const updatedGoal = await prisma.goal.update({
       where: {
         id: data.id,
-        userId: user.id, 
+        userId: userId,
       },
       data: {
         title: data.title,
         description: data.description !== undefined ? (data.description || null) : undefined,
-        status: data.status,
+        status: data.status as GoalStatus,
       },
     })
 
     revalidatePath("/dashboard/goals")
-
     return { success: true, goal: updatedGoal }
   } catch (error) {
     console.error("Erro ao editar meta:", error)
@@ -100,25 +112,23 @@ export async function updateGoal(data: UpdateGoalInput) {
 
 export async function deleteGoal(id: string) {
   try {
-    const session = await getServerSession(authOptions)
-    const user = session?.user as { id?: string; name?: string; email?: string } | undefined
+    const userId = await getValidUserId()
 
-    if (!user?.id) {
+    if (!userId) {
       throw new Error("Não autorizado. Você precisa estar logado para deletar uma meta.")
     }
 
     await prisma.goal.delete({
       where: {
         id: id,
-        userId: user.id, 
+        userId: userId,
       },
     })
 
     revalidatePath("/dashboard/goals")
-
     return { success: true }
   } catch (error) {
     console.error("Erro ao deletar meta:", error)
-    return { success: false, error: "Falha ao remover a meta do banco de dados." }
+    return { success: false, error: "Falha ao remover a meta no banco de dados." }
   }
 }
