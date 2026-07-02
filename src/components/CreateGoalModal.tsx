@@ -35,7 +35,6 @@ export default function CreateGoalModal() {
 
   return (
     <>
-      {}
       <button 
         onClick={() => setIsOpen(true)}
         className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 transition-colors text-white font-medium px-4 py-2.5 rounded-lg text-sm shadow-lg shadow-violet-900/20"
@@ -44,12 +43,10 @@ export default function CreateGoalModal() {
         Nova Meta
       </button>
 
-      {}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
           <div className="w-full max-w-md border border-zinc-800 rounded-2xl bg-zinc-900 p-6 shadow-2xl relative text-zinc-100">
             
-            {}
             <button 
               onClick={() => setIsOpen(false)}
               className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-200 transition-colors"
@@ -57,13 +54,11 @@ export default function CreateGoalModal() {
               <X className="w-5 h-5" />
             </button>
 
-            {}
             <div className="mb-6">
               <h2 className="text-xl font-bold text-zinc-100">Criar Nova Meta</h2>
               <p className="text-xs text-zinc-400 mt-1">Defina um objetivo claro para o seu hub estratégico.</p>
             </div>
 
-            {}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
@@ -100,7 +95,6 @@ export default function CreateGoalModal() {
                 </p>
               )}
 
-              {}
               <div className="flex justify-end gap-3 pt-2">
                 <button
                   type="button"

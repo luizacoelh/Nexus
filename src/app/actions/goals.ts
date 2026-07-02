@@ -71,7 +71,7 @@ export async function getGoals() {
         userId: userId,
       },
       orderBy: {
-        title: "asc",
+        createdAt: "desc",
       },
     })
 

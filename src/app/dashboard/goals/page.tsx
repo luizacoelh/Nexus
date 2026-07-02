@@ -9,7 +9,6 @@ export default async function GoalsPage() {
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 text-zinc-100">
-      {}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-zinc-800 pb-5">
         <div>
           <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
@@ -23,7 +22,6 @@ export default async function GoalsPage() {
         <CreateGoalModal />
       </div>
 
-      {}
       {goals.length === 0 ? (
         <div className="flex flex-col items-center justify-center text-center p-12 border border-dashed border-zinc-800 rounded-2xl bg-zinc-900/20 backdrop-blur-sm">
           <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-500 mb-4">
