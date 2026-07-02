@@ -10,6 +10,12 @@ interface CreateGoalInput {
   title: string
   description?: string
 }
+interface UpdateGoalInput {
+  id: string
+  title?: string
+  description?: string
+  status?: GoalStatus
+}
 
 export async function createGoal(data: CreateGoalInput) {
   try {
@@ -59,5 +65,35 @@ export async function getGoals() {
   } catch (error) {
     console.error("Erro ao listar metas:", error)
     return { success: false, error: "Falha ao buscar as metas no banco de dados." }
+  }
+}
+
+export async function updateGoal(data: UpdateGoalInput) {
+  try {
+    const session = await getServerSession(authOptions)
+    const user = session?.user as { id?: string; name?: string; email?: string } | undefined
+
+    if (!user?.id) {
+      throw new Error("Não autorizado. Você precisa estar logado para editar uma meta.")
+    }
+
+    const updatedGoal = await prisma.goal.update({
+      where: {
+        id: data.id,
+        userId: user.id, 
+      },
+      data: {
+        title: data.title,
+        description: data.description !== undefined ? (data.description || null) : undefined,
+        status: data.status,
+      },
+    })
+
+    revalidatePath("/dashboard/goals")
+
+    return { success: true, goal: updatedGoal }
+  } catch (error) {
+    console.error("Erro ao editar meta:", error)
+    return { success: false, error: "Falha ao atualizar a meta no banco de dados." }
   }
 }
