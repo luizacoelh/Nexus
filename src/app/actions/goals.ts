@@ -97,3 +97,28 @@ export async function updateGoal(data: UpdateGoalInput) {
     return { success: false, error: "Falha ao atualizar a meta no banco de dados." }
   }
 }
+
+export async function deleteGoal(id: string) {
+  try {
+    const session = await getServerSession(authOptions)
+    const user = session?.user as { id?: string; name?: string; email?: string } | undefined
+
+    if (!user?.id) {
+      throw new Error("Não autorizado. Você precisa estar logado para deletar uma meta.")
+    }
+
+    await prisma.goal.delete({
+      where: {
+        id: id,
+        userId: user.id, 
+      },
+    })
+
+    revalidatePath("/dashboard/goals")
+
+    return { success: true }
+  } catch (error) {
+    console.error("Erro ao deletar meta:", error)
+    return { success: false, error: "Falha ao remover a meta do banco de dados." }
+  }
+}
