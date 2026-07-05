@@ -132,3 +132,55 @@ export async function deleteGoal(id: string) {
     return { success: false, error: "Falha ao remover a meta no banco de dados." }
   }
 }
+
+export async function getGoalById(id: string) {
+  try {
+    const userId = await getValidUserId()
+    if (!userId) throw new Error("Não autorizado.")
+
+    const goal = await prisma.goal.findFirst({
+      where: { id, userId },
+      include: {
+        tasks: {
+          orderBy: { createdAt: "desc" },
+        },
+        notes: {
+          orderBy: { createdAt: "desc" },
+        },
+      },
+    })
+
+    if (!goal) return { success: false, error: "Meta não encontrada." }
+
+    return { success: true, goal }
+  } catch (error) {
+    console.error("Erro ao buscar meta:", error)
+    return { success: false, error: "Falha ao buscar a meta." }
+  }
+}
+
+export async function getDashboardStats() {
+  try {
+    const userId = await getValidUserId()
+    if (!userId) throw new Error("Não autorizado.")
+
+    const [goalStats, taskStats, noteCount] = await Promise.all([
+      prisma.goal.groupBy({
+        by: ["status"],
+        where: { userId },
+        _count: true,
+      }),
+      prisma.task.groupBy({
+        by: ["status"],
+        where: { userId },
+        _count: true,
+      }),
+      prisma.note.count({ where: { userId } }),
+    ])
+
+    return { success: true, goalStats, taskStats, noteCount }
+  } catch (error) {
+    console.error("Erro ao buscar stats:", error)
+    return { success: false, error: "Falha ao buscar estatísticas." }
+  }
+}
