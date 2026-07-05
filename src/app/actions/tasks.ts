@@ -2,10 +2,8 @@
 
 import { TaskStatus, TaskPriority } from "@/generated/prisma/client"
 import { prisma } from "@/lib/prisma"
-import { authOptions } from "@/lib/auth"
-import { getServerSession } from "next-auth/next"
+import { getValidUserId } from "@/lib/session"
 import { revalidatePath } from "next/cache"
-import crypto from "crypto"
 
 interface CreateTaskInput {
   title: string
@@ -23,19 +21,6 @@ interface UpdateTaskInput {
   goalId?: string | null
 }
 
-async function getValidUserId() {
-  const session = await getServerSession(authOptions)
-
-  if (!session?.user?.email) return null
-
-  const dbUser = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    select: { id: true },
-  })
-
-  return dbUser?.id || null
-}
-
 export async function createTask(data: CreateTaskInput) {
   try {
     const userId = await getValidUserId()
@@ -43,7 +28,6 @@ export async function createTask(data: CreateTaskInput) {
 
     const newTask = await prisma.task.create({
       data: {
-        id: crypto.randomUUID(),
         title: data.title,
         status: "TODO",
         priority: (data.priority as TaskPriority) ?? TaskPriority.MEDIUM,

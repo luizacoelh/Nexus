@@ -2,10 +2,8 @@
 
 import { NoteTag } from "@/generated/prisma/client"
 import { prisma } from "@/lib/prisma"
-import { authOptions } from "@/lib/auth"
-import { getServerSession } from "next-auth/next"
+import { getValidUserId } from "@/lib/session"
 import { revalidatePath } from "next/cache"
-import crypto from "crypto"
 
 interface CreateNoteInput {
   title: string
@@ -22,19 +20,6 @@ interface UpdateNoteInput {
   goalId?: string | null
 }
 
-async function getValidUserId() {
-  const session = await getServerSession(authOptions)
-
-  if (!session?.user?.email) return null
-
-  const dbUser = await prisma.user.findUnique({
-    where: { email: session.user.email },
-    select: { id: true },
-  })
-
-  return dbUser?.id || null
-}
-
 export async function createNote(data: CreateNoteInput) {
   try {
     const userId = await getValidUserId()
@@ -42,7 +27,6 @@ export async function createNote(data: CreateNoteInput) {
 
     const newNote = await prisma.note.create({
       data: {
-        id: crypto.randomUUID(),
         title: data.title,
         content: data.content,
         tag: data.tag as NoteTag || null,
