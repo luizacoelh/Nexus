@@ -90,16 +90,46 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-800 py-2.5 text-sm font-medium text-zinc-200 transition hover:bg-zinc-700 hover:border-zinc-600"
-        >
-          <svg className="w-4 h-4 text-zinc-200" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-          </svg>
-          Entrar com GitHub
-        </button>
+        <div className="grid grid-cols-1 gap-2">
+          {/* Botão GitHub */}
+          <button
+            type="button"
+            onClick={() => signIn("github", { callbackUrl: "/dashboard" })}
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-800 py-2.5 text-sm font-medium text-zinc-200 transition hover:bg-zinc-700 hover:border-zinc-600"
+          >
+            <svg className="w-4 h-4 text-zinc-200" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            Entrar com GitHub
+          </button>
+
+          {/* Botão Google */}
+          <button
+            type="button"
+            onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-800 bg-zinc-800 py-2.5 text-sm font-medium text-zinc-200 transition hover:bg-zinc-700 hover:border-zinc-600"
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24">
+              <path
+                fill="#EA4335"
+                d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582l3.51-3.51C17.818 1.159 15.082 0 12 0 7.31 0 3.24 2.686 1.214 6.614l4.052 3.151z"
+              />
+              <path
+                fill="#4285F4"
+                d="M23.64 12.218c0-.782-.07-1.536-.2-2.264H12v4.51h6.54c-.28 1.51-1.14 2.79-2.42 3.65l3.78 2.93c2.21-2.04 3.74-5.04 3.74-8.826z"
+              />
+              <path
+                fill="#FBBC05"
+                d="M5.266 14.235A7.093 7.093 0 0 1 4.91 12c0-.79.13-1.555.356-2.265L1.214 6.614A11.932 11.932 0 0 0 0 12c0 1.92.45 3.73 1.214 5.386l4.052-3.151z"
+              />
+              <path
+                fill="#34A853"
+                d="M16.12 18.014c-1.11.75-2.53 1.195-4.12 1.195-3.322 0-6.14-2.24-7.144-5.26l-4.052 3.15A11.947 11.947 0 0 0 12 24c3.24 0 5.97-1.07 7.96-2.92l-3.84-3.066z"
+              />
+            </svg>
+            Entrar com Google
+          </button>
+        </div>
 
         <p className="text-center text-xs text-zinc-400">
           Não tem uma conta?{" "}
