@@ -40,56 +40,66 @@ export default async function DashboardPage() {
   const totalTasks = taskStats.reduce((acc, t) => acc + t._count, 0)
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-8 text-zinc-100">
-      <div className="border-b border-zinc-800 pb-5">
-        <h1 className="text-3xl font-bold tracking-tight text-zinc-100">Início</h1>
-        <p className="text-sm text-zinc-400 mt-1">Visão geral do seu espaço.</p>
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6 sm:space-y-8 text-zinc-100">
+      <div className="border-b border-zinc-800 pb-4">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-100">Início</h1>
+        <p className="text-xs sm:text-sm text-zinc-400 mt-1">Visão geral do seu espaço.</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/40 space-y-1">
-          <div className="flex items-center gap-2 text-zinc-400 text-xs font-semibold uppercase tracking-wider">
-            <Target className="w-3.5 h-3.5" />
-            Metas
+      {/* Cards Compactos e Anatômicos para Dispositivos Móveis */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        {/* Metas */}
+        <div className="p-4 sm:p-5 border border-zinc-800 rounded-xl bg-zinc-900/40 flex flex-col justify-between space-y-2">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-zinc-400 text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
+              <Target className="w-3.5 h-3.5 text-zinc-500" />
+              Metas
+            </div>
+            <p className="text-2xl sm:text-3xl font-bold text-zinc-100">{totalGoals}</p>
           </div>
-          <p className="text-3xl font-bold text-zinc-100">{totalGoals}</p>
-          <div className="space-y-0.5">
+          <div className="space-y-0.5 pt-1.5 border-t border-zinc-800/60">
             {goalStats.map((g) => (
-              <p key={g.status} className={`text-xs ${statusColor[g.status as keyof typeof statusColor]}`}>
+              <p key={g.status} className={`text-[11px] sm:text-xs ${statusColor[g.status as keyof typeof statusColor]}`}>
                 {g._count} {statusLabel[g.status as keyof typeof statusLabel]}
               </p>
             ))}
           </div>
         </div>
 
-        <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/40 space-y-1">
-          <div className="flex items-center gap-2 text-zinc-400 text-xs font-semibold uppercase tracking-wider">
-            <CheckSquare className="w-3.5 h-3.5" />
-            Tarefas
+        {/* Tarefas */}
+        <div className="p-4 sm:p-5 border border-zinc-800 rounded-xl bg-zinc-900/40 flex flex-col justify-between space-y-2">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-zinc-400 text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
+              <CheckSquare className="w-3.5 h-3.5 text-zinc-500" />
+              Tarefas
+            </div>
+            <p className="text-2xl sm:text-3xl font-bold text-zinc-100">{totalTasks}</p>
           </div>
-          <p className="text-3xl font-bold text-zinc-100">{totalTasks}</p>
-          <div className="space-y-0.5">
+          <div className="space-y-0.5 pt-1.5 border-t border-zinc-800/60">
             {taskStats.map((t) => (
-              <p key={t.status} className={`text-xs ${statusColor[t.status as keyof typeof statusColor]}`}>
+              <p key={t.status} className={`text-[11px] sm:text-xs ${statusColor[t.status as keyof typeof statusColor]}`}>
                 {t._count} {statusLabel[t.status as keyof typeof statusLabel]}
               </p>
             ))}
           </div>
         </div>
 
-        <div className="p-5 border border-zinc-800 rounded-xl bg-zinc-900/40 space-y-1">
-          <div className="flex items-center gap-2 text-zinc-400 text-xs font-semibold uppercase tracking-wider">
-            <FileText className="w-3.5 h-3.5" />
+        {/* Notas */}
+        <div className="p-4 sm:p-5 border border-zinc-800 rounded-xl bg-zinc-900/40 flex flex-col justify-start space-y-1">
+          <div className="flex items-center gap-2 text-zinc-400 text-[11px] sm:text-xs font-semibold uppercase tracking-wider">
+            <FileText className="w-3.5 h-3.5 text-zinc-500" />
             Notas
           </div>
-          <p className="text-3xl font-bold text-zinc-100">{noteCount}</p>
+          <p className="text-2xl sm:text-3xl font-bold text-zinc-100">{noteCount}</p>
         </div>
       </div>
 
+      {/* Grid de Conteúdos Recentes */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Metas Recentes */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">
+            <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
               Metas recentes
             </h2>
             <Link href="/dashboard/goals" className="flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300 transition-colors">
@@ -97,7 +107,7 @@ export default async function DashboardPage() {
             </Link>
           </div>
           {recentGoals.length === 0 ? (
-            <p className="text-sm text-zinc-500">Nenhuma meta ainda.</p>
+            <p className="text-xs sm:text-sm text-zinc-500">Nenhuma meta ainda.</p>
           ) : (
             <div className="space-y-2">
               {recentGoals.map((goal) => (
@@ -106,7 +116,7 @@ export default async function DashboardPage() {
                   href={`/dashboard/goals/${goal.id}`}
                   className="flex items-center justify-between p-3 border border-zinc-800 rounded-lg bg-zinc-900/40 hover:border-zinc-700 hover:bg-zinc-900/60 transition-all group"
                 >
-                  <span className="text-sm text-zinc-200 group-hover:text-violet-400 transition-colors truncate">
+                  <span className="text-xs sm:text-sm text-zinc-200 group-hover:text-violet-400 transition-colors truncate">
                     {goal.title}
                   </span>
                   <ArrowRight className="w-3.5 h-3.5 text-zinc-600 group-hover:text-violet-400 shrink-0 transition-colors" />
@@ -116,9 +126,10 @@ export default async function DashboardPage() {
           )}
         </div>
 
+        {/* Tarefas Recentes */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">
+            <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
               Tarefas recentes
             </h2>
             <Link href="/dashboard/tasks" className="flex items-center gap-1 text-xs text-violet-400 hover:text-violet-300 transition-colors">
@@ -126,7 +137,7 @@ export default async function DashboardPage() {
             </Link>
           </div>
           {recentTasks.length === 0 ? (
-            <p className="text-sm text-zinc-500">Nenhuma tarefa ainda.</p>
+            <p className="text-xs sm:text-sm text-zinc-500">Nenhuma tarefa ainda.</p>
           ) : (
             <div className="space-y-2">
               {recentTasks.map((task) => (
@@ -134,15 +145,15 @@ export default async function DashboardPage() {
                   key={task.id}
                   className="flex items-center justify-between p-3 border border-zinc-800 rounded-lg bg-zinc-900/40"
                 >
-                  <span className="text-sm text-zinc-200 truncate">{task.title}</span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border shrink-0 ml-2 ${
+                  <span className="text-xs sm:text-sm text-zinc-200 truncate">{task.title}</span>
+                  <span className={`text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border shrink-0 ml-2 ${
                     task.status === "DONE"
                       ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
                       : task.status === "DOING"
                       ? "bg-violet-500/10 text-violet-400 border-violet-500/20"
                       : "bg-zinc-500/10 text-zinc-400 border-zinc-500/20"
                   }`}>
-                    {task.status}
+                    {statusLabel[task.status as keyof typeof statusLabel] || task.status}
                   </span>
                 </div>
               ))}
