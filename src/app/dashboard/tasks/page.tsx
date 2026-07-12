@@ -1,8 +1,8 @@
 import { getTasks } from "@/app/actions/tasks"
 import { getGoals } from "@/app/actions/goals"
 import CreateTaskModal from "@/components/CreateTaskModal"
-import TaskCard from "@/components/TaskCard"
-import { CheckSquare } from "lucide-react"
+import TaskList from "@/components/TaskList"  
+
 
 export default async function TasksPage() {
   const [tasksRes, goalsRes] = await Promise.all([getTasks(), getGoals()])
@@ -24,23 +24,8 @@ export default async function TasksPage() {
         <CreateTaskModal goals={goals} />
       </div>
 
-      {tasks.length === 0 ? (
-        <div className="flex flex-col items-center justify-center text-center p-12 border border-dashed border-zinc-800 rounded-2xl bg-zinc-900/20">
-          <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-full text-zinc-500 mb-4">
-            <CheckSquare className="w-8 h-8" />
-          </div>
-          <h3 className="text-lg font-semibold text-zinc-200">Nenhuma tarefa encontrada</h3>
-          <p className="text-sm text-zinc-400 max-w-sm mt-1">
-            Crie sua primeira tarefa para começar.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} goals={goals} />
-          ))}
-        </div>
-      )}
+      {/* Repassamos as tarefas brutas do banco para o gerenciador de filtros */}
+      <TaskList initialTasks={tasks} goals={goals} />
     </div>
   )
 }
