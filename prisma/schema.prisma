@@ -8,17 +8,19 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String?
-  createdAt DateTime @default(now())
+  id            String    @id @default(uuid())
+  name          String?   // A interrogação torna opcional (essencial para OAuth)
+  email         String    @unique
+  password      String?
+  image         String?   // <-- O campo que falta para salvar a foto do GitHub/Google
+  emailVerified DateTime? 
+  createdAt     DateTime  @default(now())
   updatedAt     DateTime  @default(now()) @updatedAt
   accounts      Account[]
   sessions      Session[]
-  goals     Goal[]
-  tasks     Task[]
-  notes     Note[]
+  goals         Goal[]
+  tasks         Task[]
+  notes         Note[]
 }
 
 model Goal {
