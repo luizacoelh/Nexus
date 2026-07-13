@@ -59,8 +59,14 @@ export default function CreateNoteModal({ goals }: CreateNoteModalProps) {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="w-full max-w-md border border-zinc-800 rounded-2xl bg-zinc-900 p-6 shadow-2xl relative text-zinc-100">
+        <div 
+          onClick={() => setIsOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm cursor-pointer"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md border border-zinc-800 rounded-2xl bg-zinc-900 p-6 shadow-2xl relative text-zinc-100 cursor-default"
+          >
             <button
               type="button"
               onClick={() => setIsOpen(false)}
