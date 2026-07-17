@@ -50,12 +50,12 @@ export default function Sidebar() {
         />
       )}
 
-      {/* SIDEBAR CONTAINER CONTROLANDO VISIBILIDADE */}
+      {/* SIDEBAR CONTAINER COM ACESSIBILIDADE E POSICIONAMENTO REFINADO */}
       <aside className={`
         fixed top-0 bottom-0 left-0 w-64 bg-zinc-950 border-r border-zinc-900 p-4 flex flex-col z-50
         transform transition-transform duration-300 ease-in-out
         md:static md:translate-x-0
-        ${isOpen ? "translate-x-0 visible" : "-translate-x-full invisible md:visible"}
+        ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
       `}>
         <div className="flex items-center justify-between border-b border-zinc-900 pb-4 mb-6 md:mb-4">
           <span className="text-2xl font-bold tracking-wider bg-linear-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
@@ -72,7 +72,11 @@ export default function Sidebar() {
         <nav className="space-y-1 flex-1">
           {menuItems.map((item) => {
             const Icon = item.icon
-            const isActive = pathname === item.href
+            
+            // LÓGICA DE ATIVAÇÃO EVOLUÍDA: Evita falsos positivos no "/dashboard" e destaca sub-rotas
+            const isActive = item.href === "/dashboard" 
+              ? pathname === item.href 
+              : pathname.startsWith(item.href)
 
             return (
               <Link
