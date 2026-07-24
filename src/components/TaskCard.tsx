@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { updateTask, deleteTask } from "@/app/actions/tasks"
 import { Trash2, Edit2, Check, X, Loader2, Calendar, Flag } from "lucide-react"
+import { toast } from "sonner"
 
 type Goal = { id: string; title: string }
 
@@ -46,7 +47,7 @@ export default function TaskCard({ task, goals }: TaskCardProps) {
     if (!editTitle.trim()) return
     setIsLoading(true)
 
-    await updateTask({
+    const result = await updateTask({
       id: task.id,
       title: editTitle,
       status: editStatus,
@@ -56,14 +57,35 @@ export default function TaskCard({ task, goals }: TaskCardProps) {
     })
 
     setIsLoading(false)
-    setIsEditing(false)
+    if (result.success) {
+      setIsEditing(false)
+      toast.success("Tarefa atualizada com sucesso!")
+    } else {
+      toast.error("Não foi possível atualizar a tarefa.")
+    }
   }
 
-  async function handleDelete() {
-    if (!confirm("Remover esta tarefa permanentemente?")) return
-    setIsLoading(true)
-    await deleteTask(task.id)
-    setIsLoading(false)
+  function handleDelete() {
+    toast.warning("Remover esta tarefa permanentemente?", {
+      action: {
+        label: "Remover",
+        onClick: async () => {
+          setIsLoading(true)
+          const result = await deleteTask(task.id)
+          setIsLoading(false)
+
+          if (result.success) {
+            toast.success("Tarefa removida com sucesso!")
+          } else {
+            toast.error("Não foi possível remover esta tarefa.")
+          }
+        },
+      },
+      cancel: {
+        label: "Cancelar",
+        onClick: () => {},
+      },
+    })
   }
 
   return (

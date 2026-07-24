@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { updateNote, deleteNote } from "@/app/actions/notes"
 import { Trash2, Edit2, Check, X, Loader2, Tag, Target } from "lucide-react"
+import { toast } from "sonner"
 
 type Goal = { id: string; title: string }
 
@@ -38,7 +39,7 @@ export default function NoteCard({ note, goals }: NoteCardProps) {
     if (!editTitle.trim() || !editContent.trim()) return
     setIsLoading(true)
 
-    await updateNote({
+    const result = await updateNote({
       id: note.id,
       title: editTitle,
       content: editContent,
@@ -47,14 +48,35 @@ export default function NoteCard({ note, goals }: NoteCardProps) {
     })
 
     setIsLoading(false)
-    setIsEditing(false)
+    if (result.success) {
+      setIsEditing(false)
+      toast.success("Nota atualizada com sucesso!")
+    } else {
+      toast.error("Não foi possível atualizar a nota.")
+    }
   }
 
-  async function handleDelete() {
-    if (!confirm("Remover esta nota permanentemente?")) return
-    setIsLoading(true)
-    await deleteNote(note.id)
-    setIsLoading(false)
+  function handleDelete() {
+    toast.warning("Remover esta nota permanentemente?", {
+      action: {
+        label: "Remover",
+        onClick: async () => {
+          setIsLoading(true)
+          const result = await deleteNote(note.id)
+          setIsLoading(false)
+
+          if (result.success) {
+            toast.success("Nota removida com sucesso!")
+          } else {
+            toast.error("Não foi possível remover esta nota.")
+          }
+        },
+      },
+      cancel: {
+        label: "Cancelar",
+        onClick: () => {},
+      },
+    })
   }
 
   return (

@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { createTask } from "@/app/actions/tasks"
 import { Plus, X, Loader2 } from "lucide-react"
+import { toast } from "sonner"
 
 type Goal = { id: string; title: string }
 
@@ -42,8 +43,10 @@ export default function CreateTaskModal({ goals }: CreateTaskModalProps) {
       setDueDate("")
       setGoalId("")
       setIsOpen(false)
+      toast.success("Tarefa criada com sucesso!")
     } else {
       setError(true)
+      toast.error("Não foi possível criar a tarefa.")
     }
   }
 
