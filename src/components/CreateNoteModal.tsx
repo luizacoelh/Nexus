@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { createNote } from "@/app/actions/notes"
 import { Plus, X, Loader2 } from "lucide-react"
+import { toast } from "sonner"
 
 type Goal = { id: string; title: string }
 
@@ -42,8 +43,10 @@ export default function CreateNoteModal({ goals }: CreateNoteModalProps) {
       setTag("")
       setGoalId("")
       setIsOpen(false)
+      toast.success("Nota criada com sucesso!")
     } else {
       setError(true)
+      toast.error("Não foi possível criar a nota.")
     }
   }
 

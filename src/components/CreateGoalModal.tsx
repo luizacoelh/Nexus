@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { createGoal } from "@/app/actions/goals"
 import { Plus, X, Loader2 } from "lucide-react"
+import { toast } from "sonner"
 
 export default function CreateGoalModal() {
   const [isOpen, setIsOpen] = useState(false)
@@ -27,8 +28,10 @@ export default function CreateGoalModal() {
       setTitle("")
       setDescription("")
       setIsOpen(false)
+      toast.success("Meta criada com sucesso!")
     } else {
       setError(true)
+      toast.error("Não foi possível criar a meta.")
     }
   }
 

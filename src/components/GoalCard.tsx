@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { updateGoal, deleteGoal } from "@/app/actions/goals"
 import { Calendar, Trash2, Edit2, Check, X, Loader2 } from "lucide-react"
+import { toast } from "sonner"
 
 interface GoalCardProps {
   goal: {
@@ -21,6 +22,7 @@ export default function GoalCard({ goal }: GoalCardProps) {
   const [editDescription, setEditDescription] = useState(goal.description || "")
   const [editStatus, setEditStatus] = useState<"ACTIVE" | "COMPLETED" | "ARCHIVED">(goal.status)
 
+
   async function handleUpdate() {
     if (!editTitle.trim()) return
     setIsLoading(true)
@@ -33,14 +35,36 @@ export default function GoalCard({ goal }: GoalCardProps) {
     })
 
     setIsLoading(false)
-    if (result.success) setIsEditing(false)
+    if (result.success) {
+      setIsEditing(false)
+      toast.success("Meta atualizada com sucesso!")
+    } else {
+      toast.error("Não foi possível atualizar a meta.")
+    }
   }
 
-  async function handleDelete() {
-    if (!confirm("Tem certeza que deseja remover esta meta permanentemente?")) return
-    setIsLoading(true)
-    await deleteGoal(goal.id)
-    setIsLoading(false)
+  // 2. EXCLUSÃO COM TOAST DE CONFIRMAÇÃO (SEM CONFIRM NATIVO)
+  function handleDelete() {
+    toast.warning("Remover esta meta permanentemente?", {
+      action: {
+        label: "Remover",
+        onClick: async () => {
+          setIsLoading(true)
+          const result = await deleteGoal(goal.id)
+          setIsLoading(false)
+
+          if (result.success) {
+            toast.success("Meta removida com sucesso!")
+          } else {
+            toast.error("Não foi possível remover este item.")
+          }
+        },
+      },
+      cancel: {
+        label: "Cancelar",
+        onClick: () => {},
+      },
+    })
   }
 
   return (
@@ -127,8 +151,7 @@ export default function GoalCard({ goal }: GoalCardProps) {
             </div>
           </div>
         </>
-      )
-      }
+      )}
     </div>
   )
 }
